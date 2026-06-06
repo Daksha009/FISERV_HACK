@@ -28,8 +28,6 @@ export async function POST(req: NextRequest) {
     }
 
     // Transform backend response → frontend BNPLResult shape
-    const monthlyIncome = Number(body.monthlyIncome);
-
     const emiSchedule = backendData.options.map(
       (opt: {
         months: number;
@@ -37,19 +35,20 @@ export async function POST(req: NextRequest) {
         emi: number;
         emiToIncomeRatio: number;
         affordable: boolean;
+        totalPayable: number;
+        totalInterest: number;
+        totalCostOfCredit: number;
         schedule: Array<{ interest: number }>;
       }) => {
-        const totalPayable = Math.round(opt.emi * opt.months * 100) / 100;
-        const totalInterest = Math.round((totalPayable - body.productPrice) * 100) / 100;
-
         return {
           tenure: opt.months,
           emi: opt.emi,
           annualRate: opt.annualRate,
-          interest: totalInterest,
-          totalPayable: Math.round(totalPayable),
+          interest: opt.totalInterest,
+          totalPayable: Math.round(opt.totalPayable),
+          totalCostOfCredit: opt.totalCostOfCredit,
           emiToIncomeRatio:
-            Math.round((opt.emiToIncomeRatio * 100) * 10) / 10,
+            Math.round(opt.emiToIncomeRatio * 100 * 10) / 10,
           isAffordable: opt.affordable,
         };
       }
@@ -64,12 +63,16 @@ export async function POST(req: NextRequest) {
       : emiSchedule[emiSchedule.length - 1]?.emiToIncomeRatio || 0;
 
     const result = {
+      status: backendData.status,
       isApproved: backendData.decision.approved,
       eligibleLimit: backendData.eligibility.eligibleLimit,
       productPrice: backendData.eligibility.productPrice,
       riskGrade: backendData.decision.riskGrade,
       recommendedTenure: backendData.recommendedTenure,
       bestEMIToIncomeRatio,
+      creditScore: backendData.creditScore,
+      processingFee: backendData.financials.processingFee,
+      effectiveAnnualRate: backendData.financials.effectiveAnnualRate,
       emiSchedule,
       reasonCodes: backendData.decision.reasonCodes,
       suggestions: backendData.suggestions || [],

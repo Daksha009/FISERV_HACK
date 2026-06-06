@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,17 +16,16 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+type Message = { id: string; role: "user" | "assistant"; content: string };
+
 export function AIAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
-  });
-
-  const isLoading = status === "streaming" || status === "submitted";
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -36,12 +33,38 @@ export function AIAssistant() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isLoading]);
+
+  const sendMessage = (text: string) => {
+    const userMessage: Message = { id: Date.now().toString(), role: "user", content: text };
+    setMessages((prev) => [...prev, userMessage]);
+    setIsLoading(true);
+
+    // Simulate API delay and provide hardcoded responses
+    setTimeout(() => {
+      let response = "I'm the PayFlex AI assistant! Since this is a demo environment, I have a few specific answers ready. Try asking me about credit scores, limits, or how to improve eligibility.";
+      
+      const lowerText = text.toLowerCase();
+      if (lowerText.includes("credit score") || lowerText.includes("calculated")) {
+        response = "Your credit score (0-100) is calculated using 4 weighted factors:\n1. Income Stability (25%)\n2. Credit History Depth (25%)\n3. Default Track Record (30%)\n4. Debt Burden Ratio (20%)";
+      } else if (lowerText.includes("limit")) {
+        response = "Your eligible limit is calculated based on your monthly income (25% base) multiplied by your Risk Grade multiplier (A=1.2x, B=1.0x, C=0.85x, D=0.7x). For conditional approvals, this limit is further reduced to 80%.";
+      } else if (lowerText.includes("improve") || lowerText.includes("eligibility")) {
+        response = "To improve your eligibility:\n- Maintain a clean payment history (0 defaults)\n- Build a longer credit depth\n- Keep the product price well below 50% of your annual income\n- Ensure you meet the minimum income threshold of ₹15,000";
+      } else if (lowerText.includes("hello") || lowerText.includes("hi")) {
+        response = "Hello! I'm here to help you understand the PayFlex BNPL engine. What would you like to know?";
+      }
+
+      const assistantMessage: Message = { id: (Date.now() + 1).toString(), role: "assistant", content: response };
+      setMessages((prev) => [...prev, assistantMessage]);
+      setIsLoading(false);
+    }, 1200);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
-    sendMessage({ text: input });
+    sendMessage(input);
     setInput("");
   };
 
@@ -131,7 +154,7 @@ export function AIAssistant() {
                     <button
                       key={idx}
                       onClick={() => {
-                        sendMessage({ text: question });
+                        sendMessage(question);
                       }}
                       className="w-full text-left px-3 py-2 text-sm rounded-lg bg-card border border-border hover:border-[#FF6600]/50 hover:bg-[#FF6600]/5 transition-colors"
                     >
@@ -163,20 +186,7 @@ export function AIAssistant() {
                       : "bg-card border border-border rounded-bl-md"
                   )}
                 >
-                  {message.parts ? (
-                    message.parts.map((part, index) => {
-                      if (part.type === "text") {
-                        return (
-                          <span key={index} className="whitespace-pre-wrap">
-                            {part.text}
-                          </span>
-                        );
-                      }
-                      return null;
-                    })
-                  ) : (
-                    <span className="whitespace-pre-wrap">{message.content}</span>
-                  )}
+                  <span className="whitespace-pre-wrap">{message.content}</span>
                 </div>
                 {message.role === "user" && (
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-accent flex items-center justify-center">
