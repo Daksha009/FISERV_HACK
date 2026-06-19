@@ -2,13 +2,15 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { History, CheckCircle2, XCircle, AlertTriangle, RotateCcw } from "lucide-react";
+import { History, CheckCircle2, XCircle, AlertTriangle, RotateCcw, Trash2, Cloud } from "lucide-react";
 import type { EvaluationRecord } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface EvaluationHistoryProps {
   history: EvaluationRecord[];
   onReload?: (record: EvaluationRecord) => void;
+  onDelete?: (id: string) => void;
+  isLoggedIn?: boolean;
 }
 
 const statusConfig = {
@@ -17,7 +19,7 @@ const statusConfig = {
   REJECTED: { icon: XCircle, bg: "bg-red-50/50 border-red-200 dark:bg-red-950/20 dark:border-red-800", badge: "bg-red-500 text-red-50", label: "Rejected" },
 };
 
-export function EvaluationHistory({ history, onReload }: EvaluationHistoryProps) {
+export function EvaluationHistory({ history, onReload, onDelete, isLoggedIn }: EvaluationHistoryProps) {
   return (
     <Card className="shadow-lg border-border/50 glass-card">
       <CardHeader className="pb-4">
@@ -43,12 +45,21 @@ export function EvaluationHistory({ history, onReload }: EvaluationHistoryProps)
                 style={{ animationDelay: `${index * 80}ms` }}
                 onClick={() => onReload?.(record)}
               >
-                {/* Reload indicator */}
-                {onReload && (
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                {/* Action buttons */}
+                <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {onReload && (
                     <RotateCcw className="w-3.5 h-3.5 text-muted-foreground" />
-                  </div>
-                )}
+                  )}
+                  {onDelete && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onDelete(record.id); }}
+                      className="p-1 rounded-lg hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors"
+                      aria-label="Delete evaluation"
+                    >
+                      <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                    </button>
+                  )}
+                </div>
 
                 <div className="flex items-center justify-between mb-3">
                   <Badge className={cn("text-[10px]", status.badge)}>
@@ -92,9 +103,17 @@ export function EvaluationHistory({ history, onReload }: EvaluationHistoryProps)
                 </div>
                 
                 <div className="mt-3 pt-2 border-t border-border/50 flex items-center justify-between">
-                  <p className="text-[10px] text-muted-foreground">
-                    {record.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-[10px] text-muted-foreground">
+                      {new Date(record.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric' })}{' '}
+                      {new Date(record.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                    {isLoggedIn && (
+                      <span title="Saved to cloud">
+                        <Cloud className="w-3 h-3 text-blue-400" />
+                      </span>
+                    )}
+                  </div>
                   {onReload && (
                     <span className="text-[10px] text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                       Click to reload →

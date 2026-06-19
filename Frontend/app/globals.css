@@ -404,3 +404,42 @@ input[type="range"]::-moz-range-thumb {
   border: none;
   box-shadow: 0 2px 8px rgba(255, 102, 0, 0.3);
 }
+
+/* ─── Landing Page ───────────────────────────────────────────────────────── */
+
+.landing-hero-bg {
+  background: linear-gradient(135deg, 
+    rgba(255, 102, 0, 0.03) 0%, 
+    rgba(99, 102, 241, 0.03) 50%, 
+    rgba(255, 102, 0, 0.02) 100%
+  );
+}
+
+.dark .landing-hero-bg {
+  background: linear-gradient(135deg, 
+    rgba(255, 102, 0, 0.06) 0%, 
+    rgba(99, 102, 241, 0.04) 50%, 
+    rgba(255, 102, 0, 0.03) 100%
+  );
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  33% { transform: translateY(-20px) translateX(10px); }
+  66% { transform: translateY(10px) translateX(-5px); }
+}
+
+@keyframes float-slow-reverse {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  33% { transform: translateY(15px) translateX(-10px); }
+  66% { transform: translateY(-10px) translateX(8px); }
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-float-slow-reverse {
+  animation: float-slow-reverse 10s ease-in-out infinite;
+}
+

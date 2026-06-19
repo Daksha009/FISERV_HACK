@@ -1,10 +1,32 @@
 import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'PayFlex BNPL - Smart Credit Eligibility Platform',
-  description: 'AI-powered Buy Now Pay Later eligibility decisions with instant approval, risk assessment, and EMI calculations. Built with a weighted credit scoring model for transparent, accurate decisions.',
-  generator: 'v0.app',
+  title: {
+    default: 'PayFlex BNPL — Smart Credit Eligibility Engine',
+    template: '%s | PayFlex BNPL',
+  },
+  description: 'AI-powered Buy Now Pay Later eligibility engine with a transparent 4-factor weighted credit scoring model. Get instant approvals, detailed EMI schedules, and actionable suggestions.',
+  keywords: ['BNPL', 'Buy Now Pay Later', 'Credit Score', 'EMI Calculator', 'Loan Eligibility', 'PayFlex', 'Fiserv'],
+  authors: [{ name: 'PayFlex Team' }],
+  creator: 'PayFlex BNPL',
+  openGraph: {
+    type: 'website',
+    locale: 'en_IN',
+    title: 'PayFlex BNPL — Smart Credit Eligibility Engine',
+    description: 'AI-powered BNPL eligibility engine with transparent 4-factor credit scoring, real-time EMI calculations, and instant decisions.',
+    siteName: 'PayFlex BNPL',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PayFlex BNPL — Smart Credit Eligibility Engine',
+    description: 'AI-powered BNPL eligibility engine with transparent 4-factor credit scoring.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   icons: {
     icon: [
       {
@@ -35,9 +57,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <meta name="theme-color" content="#FF6600" />
       </head>
       <body className="font-sans antialiased gradient-bg min-h-screen">
         {children}
+        <Analytics />
       </body>
     </html>
   )
