@@ -72,7 +72,6 @@ function CreditCard({ approved }: { approved: boolean }) {
         <Text
           position={[0.9, 0.7, 0.05]}
           fontSize={0.18}
-          font="/fonts/Geist-Bold.ttf"
           color="white"
           anchorX="center"
           anchorY="middle"
@@ -92,7 +91,6 @@ function CreditCard({ approved }: { approved: boolean }) {
           <Text
             position={[0, 0, 0.02]}
             fontSize={0.12}
-            font="/fonts/Geist-Bold.ttf"
             color="white"
             anchorX="center"
             anchorY="middle"
