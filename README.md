@@ -1,4 +1,4 @@
-# 🚀 PayFlex BNPL — Smart Credit Eligibility Platform
+#  PayFlex BNPL - Smart Credit Eligibility Platform
 
 > **Fiserv Hackathon 2026** · AI-Powered Buy Now Pay Later Eligibility Engine
 
