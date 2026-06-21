@@ -27,10 +27,10 @@ const presets = {
     productPrice: 12000,
   },
   productExceedsLimit: {
-    monthlyIncome: 40000,
+    monthlyIncome: 25000,
     creditHistoryMonths: 18,
     numberOfDefaults: 0,
-    productPrice: 12000,
+    productPrice: 50000,
   },
   lowIncomeRejection: {
     monthlyIncome: 10000,

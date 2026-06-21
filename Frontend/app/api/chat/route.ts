@@ -13,7 +13,7 @@ const SYSTEM_PROMPT = `You are PayFlex AI Assistant, a helpful financial advisor
 
 Key facts about our BNPL product:
 - Minimum monthly income required: ₹15,000
-- Eligible limit = Monthly Income × 25% × Risk Band Multiplier
+- Eligible limit = Monthly Income × 150% × Risk Band Multiplier
 - Risk Grade A: 0% interest, 1.2× multiplier (0 defaults, 24+ months credit)
 - Risk Grade B: 10% interest, 1.0× multiplier (0 defaults, 12+ months credit)
 - Risk Grade C: 14% interest, 0.85× multiplier (≤1 default, 6+ months credit)
