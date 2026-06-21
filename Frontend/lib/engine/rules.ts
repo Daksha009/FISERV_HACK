@@ -66,7 +66,7 @@ const rules: RulesConfig = {
 
   // ─── Eligibility Thresholds ─────────────────────────────────────────────────
   eligibility: {
-    baseLimitPercent: 0.25, // eligible_limit = income × 25% × multiplier
+    baseLimitPercent: 1.5, // eligible_limit = income × 150% × multiplier
     minIncome: 15000, // ₹15,000 minimum monthly income
     minCreditHistoryMonths: 6, // at least 6 months of credit history
   },
@@ -89,7 +89,7 @@ const rules: RulesConfig = {
     },
     // Sub-score parameters
     incomeStability: {
-      idealIncomeToProductRatio: 5, // income ≥ 5× product price → perfect score
+      idealIncomeToProductRatio: 1.5, // income ≥ 1.5× product price → perfect score
       minIncomeThreshold: 15000, // below this gets a penalty
     },
     creditDepth: {
